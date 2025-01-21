@@ -1,0 +1,524 @@
+/********** Template CSS **********/
+:root {
+    --primary: #eb1616;
+    --secondary: #191c24;
+    --light: #6c7293;
+    --dark: #000000;
+}
+
+.back-to-top {
+    position: fixed;
+    display: none;
+    right: 45px;
+    bottom: 45px;
+    z-index: 99;
+}
+
+/*** Spinner ***/
+#spinner {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-out, visibility 0s linear 0.5s;
+    z-index: 99999;
+}
+
+#spinner.show {
+    transition: opacity 0.5s ease-out, visibility 0s linear 0s;
+    visibility: visible;
+    opacity: 1;
+}
+
+/*** Button ***/
+.btn {
+    transition: 0.5s;
+}
+
+.btn-square {
+    width: 38px;
+    height: 38px;
+}
+
+.btn-sm-square {
+    width: 32px;
+    height: 32px;
+}
+
+.btn-lg-square {
+    width: 48px;
+    height: 48px;
+}
+
+.btn-square,
+.btn-sm-square,
+.btn-lg-square {
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: normal;
+    border-radius: 50px;
+}
+
+/*** Layout ***/
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--secondary);
+    transition: margin-left 0.5s ease;
+    z-index: 999;
+}
+
+.content {
+    margin-left: 250px;
+    min-height: 100vh;
+    background: var(--dark);
+    transition: margin-left 0.5s ease;
+}
+
+@media (min-width: 992px) {
+    .sidebar {
+        margin-left: 0;
+    }
+
+    .sidebar.open {
+        margin-left: -250px;
+    }
+
+    /* Saat sidebar terbuka atau tertutup */
+    .sidebar.open ~ .content {
+        margin-left: 0;
+    }
+
+    .sidebar.open ~ .footer {
+        margin-left: 0;
+    }
+
+    .sidebar.open + .content + .footer {
+        margin-left: 0; /* No margin when sidebar is collapsed */
+    }
+
+    .content {
+        width: calc(100% - 250px);
+    }
+
+    .content.open {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .sidebar {
+        margin-left: -250px;
+    }
+
+    .sidebar.open {
+        margin-left: 0;
+    }
+
+    .content {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+/*** Navbar ***/
+.sidebar .navbar .navbar-nav .nav-link {
+    padding: 7px 20px;
+    color: var(--light);
+    font-weight: 500;
+    border-left: 3px solid var(--secondary);
+    border-radius: 0 30px 30px 0;
+    outline: none;
+}
+
+.sidebar .navbar .navbar-nav .nav-link:hover,
+.sidebar .navbar .navbar-nav .nav-link.active {
+    color: var(--primary);
+    background: var(--dark);
+    border-color: var(--primary);
+}
+
+.sidebar .navbar .navbar-nav .nav-link i {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--dark);
+    border-radius: 40px;
+}
+
+.sidebar .navbar .navbar-nav .nav-link:hover i,
+.sidebar .navbar .navbar-nav .nav-link.active i {
+    background: var(--secondary);
+}
+
+.sidebar .navbar .dropdown-toggle::after {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    border: none;
+    content: "\f107";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    transition: 0.5s;
+}
+
+.sidebar .navbar .dropdown-toggle[aria-expanded="true"]::after {
+    transform: rotate(-180deg);
+}
+
+.sidebar .navbar .dropdown-item {
+    padding-left: 25px;
+    border-radius: 0 30px 30px 0;
+    color: var(--light);
+}
+
+.sidebar .navbar .dropdown-item:hover,
+.sidebar .navbar .dropdown-item.active {
+    background: var(--dark);
+}
+
+.content .navbar .navbar-nav .nav-link {
+    margin-left: 25px;
+    padding: 12px 0;
+    color: var(--light);
+    outline: none;
+}
+
+.content .navbar .navbar-nav .nav-link:hover,
+.content .navbar .navbar-nav .nav-link.active {
+    color: var(--primary);
+}
+
+.content .navbar .sidebar-toggler,
+.content .navbar .navbar-nav .nav-link i {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--dark);
+    border-radius: 40px;
+}
+
+.content .navbar .dropdown-item {
+    color: var(--light);
+}
+
+.content .navbar .dropdown-item:hover,
+.content .navbar .dropdown-item.active {
+    background: var(--dark);
+}
+
+.content .navbar .dropdown-toggle::after {
+    margin-left: 6px;
+    vertical-align: middle;
+    border: none;
+    content: "\f107";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    transition: 0.5s;
+}
+
+.content .navbar .dropdown-toggle[aria-expanded="true"]::after {
+    transform: rotate(-180deg);
+}
+
+@media (max-width: 575.98px) {
+    .content .navbar .navbar-nav .nav-link {
+        margin-left: 15px;
+    }
+}
+
+/*** Date Picker ***/
+.bootstrap-datetimepicker-widget.bottom {
+    top: auto !important;
+}
+
+.bootstrap-datetimepicker-widget .table * {
+    border-bottom-width: 0px;
+}
+
+.bootstrap-datetimepicker-widget .table th {
+    font-weight: 500;
+}
+
+.bootstrap-datetimepicker-widget.dropdown-menu {
+    padding: 10px;
+    border-radius: 2px;
+}
+
+.bootstrap-datetimepicker-widget table td.active,
+.bootstrap-datetimepicker-widget table td.active:hover {
+    background: var(--primary);
+}
+
+.bootstrap-datetimepicker-widget table td.today::before {
+    border-bottom-color: var(--primary);
+}
+
+/*** Testimonial ***/
+.progress .progress-bar {
+    width: 0px;
+    transition: 2s;
+}
+
+/*** Testimonial ***/
+.testimonial-carousel .owl-dots {
+    margin-top: 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.testimonial-carousel .owl-dot {
+    position: relative;
+    display: inline-block;
+    margin: 0 5px;
+    width: 15px;
+    height: 15px;
+    border: 5px solid var(--primary);
+    border-radius: 15px;
+    transition: 0.5s;
+}
+
+.testimonial-carousel .owl-dot.active {
+    background: var(--dark);
+    border-color: var(--primary);
+}
+
+/* Wrapper for the content and footer */
+.container-fluid {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Ensures the main content area takes up available space */
+.content {
+    flex: 1;
+}
+
+/* Dark theme for select element */
+.form-control {
+    background-color: var(--secondary);
+    color: var(--light);
+    border: 1px solid var(--light);
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: none;
+    background-color: var(--secondary);
+    color: var(--light);
+}
+
+select.form-control {
+    background-color: var(--secondary) !important;
+    color: var(--light) !important;
+    border: 1px solid var(--light) !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 10px;
+}
+
+select.form-control-select {
+    background-color: var(--secondary) !important;
+    color: var(--light) !important;
+    border: 1px solid var(--light) !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 10px;
+}
+
+select.form-control-select option {
+    background-color: var(--secondary) !important;
+    color: var(--light) !important;
+}
+
+select.form-control-select:focus {
+    border-color: var(--primary) !important;
+    background-color: var(--secondary) !important;
+    color: var(--light) !important;
+    box-shadow: none !important;
+}
+
+/* Tambahkan jarak untuk navbar dan footer agar sejajar dengan sidebar */
+.content .navbar {
+    margin-left: 25px; /* Jarak yang sama dengan sidebar */
+}
+
+.footer {
+    margin-left: 250px; /* Same as content when sidebar is open */
+    background-color: #6c757d; /* Background color */
+    padding: 1rem;
+    text-align: center;
+    transition: margin-left 0.5s ease; /* Smooth transition for margin */
+}
+
+@media (max-width: 991.98px) {
+    .footer {
+        margin-left: 0; /* Footer tidak bergeser pada layar kecil */
+    }
+}
+
+.breadcrumb {
+    position: sticky;
+    top: 60px; /* Memberikan jarak dari navbar */
+    z-index: 100; /* Pastikan breadcrumb tetap berada di atas konten lainnya */
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* Adjust Table Styling */
+table.dataTable {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.dataTable th,
+table.dataTable td {
+    padding: 12px 20px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+table.dataTable th {
+    background-color: var(--secondary);
+    color: var(--light);
+    border: 1px solid var(--dark);
+}
+
+table.dataTable tbody tr:nth-child(even) {
+    background-color: var(--dark);
+}
+
+table.dataTable tbody tr:hover {
+    background-color: var(--primary);
+    color: var(--light);
+}
+
+/* Pagination Button Style */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination .page-item {
+    margin: 0 5px;
+}
+
+.pagination .page-item a {
+    padding: 8px 14px;
+    font-size: 14px;
+    background-color: var(--secondary);
+    color: var(--light);
+    border-radius: 30px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.pagination .page-item a:hover {
+    background-color: var(--primary);
+    color: var(--light);
+}
+
+.pagination .page-item.active a {
+    background-color: var(--primary);
+    color: var(--light);
+}
+
+/* Modal Styling */
+.modal-content {
+    background-color: var(--secondary); /* Latar belakang gelap */
+    color: var(--light); /* Teks berwarna terang */
+}
+
+/* Modal Header */
+.modal-header {
+    border-bottom: 1px solid var(--light);
+}
+
+/* Modal Footer */
+.modal-footer {
+    border-top: 1px solid var(--light);
+}
+
+/* Form Control - Dark Theme for Select */
+select.form-control {
+    background-color: var(--secondary);
+    color: var(--light);
+    border: 1px solid var(--light);
+}
+
+select.form-control option {
+    background-color: var(--secondary);
+    color: var(--light);
+}
+
+select.form-control:focus {
+    border-color: var(--primary);
+    background-color: var(--secondary);
+    color: var(--light);
+    box-shadow: none;
+}
+
+/* Dark Theme for the DataTable */
+table.dataTable {
+    background-color: #2d2d2d; /* Dark background for the table */
+    color: white; /* White text color */
+}
+
+table.dataTable thead {
+    background-color: #444444; /* Darker background for the header */
+}
+
+table.dataTable thead th {
+    color: #f1f1f1; /* Lighter text color for headers */
+}
+
+table.dataTable tbody tr:nth-child(odd) {
+    background-color: #3a3a3a; /* Slightly lighter background for odd rows */
+}
+
+table.dataTable tbody tr:nth-child(even) {
+    background-color: #323232; /* Slightly darker background for even rows */
+}
+
+/* Modify search input box color */
+div.dataTables_filter input {
+    background-color: #444444; /* Dark background for the search box */
+    color: white; /* White text color */
+    border: 1px solid #555555; /* Light border for the search box */
+}
+
+/* Add focus effect to the search box */
+div.dataTables_filter input:focus {
+    border-color: #007bff; /* Blue border color when focused */
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Focus glow effect */
+}
+
+html,
+body {
+    height: 100%;
+}
+
+
+#usersTable_wrapper {
+    margin-top: 20px; /* Adjust the value as needed */
+}
+
+#usersTable_filter input {
+    margin-top: 10px; /* Adjust the value as needed */
+}
