@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\DataTables;
 
 class AdminController extends Controller
 {
@@ -13,16 +15,17 @@ class AdminController extends Controller
 
     public function index()
     {
-        $total = User::where('rolename','user')->count();
         $user = Auth::user();
-        return view("index",compact('user','total'));
+        $users = User::all();
+        $total = $users->where('rolename','User')->count();;
+        $totaladmin = $users->where('rolename','Admin')->count();
+        return view("index",compact('user','total','totaladmin'));
     }
 
     public function getUsers(Request $request)
     {
         $user = Auth::user();
 
-        // Initialize the query for fetching users with the role "user"
         $query = User::where('rolename', 'user');
     
         // Apply search filter if exists
@@ -32,15 +35,13 @@ class AdminController extends Controller
                   ->orWhere('major', 'like', '%' . $request->search . '%');
         }
     
-        // Apply sorting by major if selected
         if ($request->has('sort_major') && $request->sort_major != '') {
             $query->where('major', $request->sort_major);
         }
     
-        // Get the paginated result
         $tabel = $query->paginate(10);
     
-        return view('users', compact('user', 'tabel'));  // Kirim data pengguna dan pengguna yang dipaginasikan
+        return view('users', compact('user', 'tabel')); 
     }
     
 
@@ -50,29 +51,42 @@ class AdminController extends Controller
         return response()->json($user); 
     }
     
-    public function update(Request $request)
+    public function update(UpdateRequest $request, $id)
     {
+        // Validasi
+        $validate = $request->validated();
+    
         try {
-            $user = User::find($request->user_id);
-    
-            if ($user) {
-                $user->username = $request->username;
-                $user->email = $request->email;
-                $user->phone_number = $request->phone_number;
-                $user->address = $request->address;
-                $user->major = $request->major;
-                $user->status = $request->status;
-                $user->save();
-    
-                toast('Update Berhasil', 'success');
-                return redirect()->back();
-            } else {
+            // Temukan user
+            $user = User::find($id);
+            if (!$user) {
                 throw new \Exception('User not found');
             }
+    
+            // Update data user
+            $user->username = $validate['username'];
+            $user->email = $validate['email'];
+            $user->phone_number = $validate['phone_number'];
+            $user->address = $validate['address'];
+            $user->major = $validate['major'];
+            $user->status = $validate['status'];
+            $user->save();
+    
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Update Success',
+                'success' => true,
+                'redirect' => '/admin/users'
+            ], 200);
         } catch (\Exception $e) {
-            toast('Update Gagal: ' . $e->getMessage(), 'error');
-            return redirect()->back();
+            // Tangani error jika user tidak ditemukan atau update gagal
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Update Gagal: ' . $e->getMessage(),
+                'success' => false,
+            ], 400);
         }
     }
+    
     
 }

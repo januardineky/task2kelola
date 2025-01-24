@@ -20,6 +20,7 @@
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.min.css">
 
 
     <!-- Customized Bootstrap Stylesheet -->
@@ -55,7 +56,7 @@
                     </a>
                     <div class="d-flex align-items-center ms-4 mb-4">
                         <div class="position-relative">
-                            <img class="rounded-circle" src="img/pp.png" alt=""
+                            <img class="rounded-circle" src="{{ asset('img/pp.png') }}" alt=""
                                 style="width: 40px; height: 40px;">
                             <div
                                 class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
@@ -68,14 +69,14 @@
                     </div>
                     <div class="navbar-nav w-100">
                         @if (auth()->user()->rolename == 'Admin')
-                            <a href="/index" class="nav-item nav-link"><i
+                            <a href="/admin/index" class="nav-item nav-link"><i
                                     class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                         @else
-                            <a href="/home" class="nav-item nav-link"><i
+                            <a href="/user/home" class="nav-item nav-link"><i
                                     class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                         @endif
                         @if (auth()->user()->rolename == 'Admin')
-                            <a href="/users" class="nav-item nav-link"><i class="fa fa-table me-2"></i>User Data</a>
+                            <a href="/admin/users" class="nav-item nav-link"><i class="fa fa-table me-2"></i>User Data</a>
                         @endif
                     </div>
                 </nav>
@@ -91,13 +92,10 @@
                     <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
                         <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
                     </a>
-                    <a href="#" class="sidebar-toggler flex-shrink-0">
-                        <i class="fa fa-bars"></i>
-                    </a>
                     <div class="navbar-nav align-items-center ms-auto">
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <img class="rounded-circle me-lg-2" src="img/pp.png" alt=""
+                                <img class="rounded-circle me-lg-2" src="{{ asset('img/pp.png') }}" alt=""
                                     style="width: 40px; height: 40px;">
                                 <span class="d-none d-lg-inline-flex">{{ $user->username }}</span>
                             </a>
@@ -109,7 +107,6 @@
                     </div>
                 </nav>
                 <!-- Navbar End -->
-
                 @yield('content')
             </div>
 
@@ -119,7 +116,7 @@
                     <div class="col-12 col-sm-6 text-center text-sm-start">
                         &copy; <a href="#">Task 2</a>, All Right Reserved.
                     </div>
-                    <div class=" text-center text-sm-end">
+                    <div class="col-12 col-sm-6 text-center text-sm-end">
                         Designed By <a href="https://htmlcodex.com">HTML Codex</a>
                         <br>Distributed By: <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
                     </div>
@@ -147,6 +144,7 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
         crossorigin="anonymous"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#usersTable').DataTable({
@@ -160,7 +158,8 @@
                 stateSave: true,
             });
         });
-    </script>
+    </script>    
+    @yield('script')
 </body>
 
 </html>
