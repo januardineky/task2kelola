@@ -25,7 +25,7 @@ use Illuminate\Validation\Rule;
             return [
                 'username' => 'required|string|max:255|unique:users,username',
                 'email' => 'required|string|email|max:255|unique:users,email',
-                'phone_number' => 'required|regex:/^[0-9]+$/|max:13',
+                'phone_number' => 'required|regex:/^[0-9]+$/|max:13|min:11',
                 'address' => 'required|string',
                 'major' => [
                     'required',

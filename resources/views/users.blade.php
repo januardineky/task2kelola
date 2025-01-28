@@ -16,6 +16,9 @@
                 <h1 class="mt-4 text-start">Users Data</h1>
             </div>
             <div class="col-md-6 d-flex justify-content-end">
+                <button class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#createUserModal">
+                    <i class="fas fa-user-plus"></i> Create
+                </button>
                 <form action="/admin/users" method="get" class="d-flex">
 
                     <select name="sort_major" class="form-control me-4" onchange="this.form.submit()">
@@ -74,6 +77,10 @@
                                 onclick="openEditModal('{{ $table->id }}')">
                                 <i class="fas fa-edit"></i>
                             </a>
+                            <a href="#" class="btn btn-primary text-white p-2" title="Delete"
+                                onclick="deleteUser('{{ $table->id }}')">
+                                <i class="fas fa-trash"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
@@ -91,6 +98,116 @@
                     <a class="page-link" href="{{ $tabel->nextPageUrl() }}" aria-label="Next">Next >></a>
                 </li>
             </ul>
+        </div>
+    </div>
+
+    <!-- Create User Modal -->
+    <div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createUserModalLabel">Create New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="createUserForm" action="/admin/users/store" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="new_username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" name="username" id="new_username" required>
+                                    <div class="text-danger" id="usernameError"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="new_email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" id="new_email" required>
+                                    <div class="text-danger" id="emailError"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="new_phone_number" class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" name="phone_number" id="new_phone_number"
+                                        required>
+                                    <div class="text-danger" id="phonenumberError"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="new_address" class="form-label">Address</label>
+                                    <textarea class="form-control" name="address" id="new_address" rows="4" required></textarea>
+                                    <div class="text-danger" id="addressError"></div>
+                                </div>
+                                <div class="mb-3 mt-4">
+                                    <label for="new_status" class="form-label">Status</label>
+                                    <select class="form-control" name="status" id="new_status" required>
+                                        <option value="1">Active</option>
+                                        <option value="0">Not Active</option>
+                                    </select>
+                                    <div class="text-danger" id="statusError"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="new_major" class="form-label">Major</label>
+                                    <select class="form-control" name="major" id="new_major" required>
+                                        <option value="">Select Major</option>
+                                        <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
+                                        <option value="Teknik Komputer Jaringan">Teknik Komputer Jaringan</option>
+                                        <option value="Teknik Elektronika Industri">Teknik Elektronika Industri</option>
+                                        <option value="Desain Komunikasi Visual">Desain Komunikasi Visual</option>
+                                        <option value="Desain Pemodelan dan Informasi Bangunan">Desain Pemodelan dan
+                                            Informasi Bangunan</option>
+                                        <option value="Teknik Sepeda Motor">Teknik Sepeda Motor</option>
+                                        <option value="Teknik Kendaraan Ringan">Teknik Kendaraan Ringan</option>
+                                    </select>
+                                    <div class="text-danger" id="majorError"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="new_rolename" class="form-label">Role</label>
+                                    <select class="form-control" name="rolename" id="new_rolename" required>
+                                        <option value="">Select Role</option>
+                                        <option value="User">User</option>
+                                        <option value="Admin">Admin</option>
+                                    </select>
+                                    <div class="text-danger" id="rolenameError"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Password Inputs -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="new_password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" name="password" id="new_password"
+                                        required>
+                                    <div class="text-danger" id="passwordError"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" name="confirm_password"
+                                        id="confirm_password" required>
+                                    <div class="text-danger" id="confirmPasswordError"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create User</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -182,6 +299,51 @@
 
 @section('script')
     <script>
+        $('#createUserForm').submit(function(e) {
+            e.preventDefault();
+
+            let formData = {
+                _token: $('input[name=_token]').val(),
+                username: $('#new_username').val(),
+                email: $('#new_email').val(),
+                phone_number: $('#new_phone_number').val(),
+                address: $('#new_address').val(),
+                major: $('#new_major').val(),
+                status: $('#new_status').val(),
+                rolename: $('#new_rolename').val(),
+                password: $('#new_password').val(),
+                password_confirmation: $('#confirm_password').val(),
+            };
+
+            console.log("Form Data Sent:", formData); // Debugging
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "/admin/users/store",
+                type: "POST",
+                data: formData,
+                success: function(response) {
+                    console.log("Server Response:", response); // Debugging
+                    if (response.success) {
+                        alert(response.message);
+                        $('#createUserModal').modal('hide');
+                        location.reload();
+                    }
+                },
+                error: function(xhr) {
+                    console.log("Error Response:", xhr.responseJSON); // Debugging
+                    let errors = xhr.responseJSON.errors;
+                    $('.text-danger').text('');
+                    $.each(errors, function(key, value) {
+                        $('#' + key + 'Error').text(value[0]);
+                    });
+                }
+            });
+        });
+
+
         // Open the edit modal and populate the fields
         function openEditModal(userId) {
             $('.text-danger').text('');
@@ -264,5 +426,34 @@
         document.getElementById('phone_number').addEventListener('input', function(e) {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
+
+        function deleteUser(userId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/admin/users/delete/' + userId,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            Swal.fire("Deleted!", response.message, "success");
+                            location.reload();
+                        },
+                        error: function(xhr) {
+                            Swal.fire("Error!", "Something went wrong.", "error");
+                        }
+                    });
+                }
+            });
+        }
     </script>
 @endsection

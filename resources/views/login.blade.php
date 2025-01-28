@@ -36,6 +36,10 @@
                             placeholder="Password">
                         <label for="password">Password</label>
                         <div class="text-danger" id="passwordError"></div>
+                        <span class="position-absolute top-50 end-0 translate-middle-y me-3" id="togglePassword"
+                            style="cursor: pointer;">
+                            <i class="fa fa-eye"></i>
+                        </span>
                     </div>
                     <div class="mt-3 text-center">
                         <p>Dont have an account? <a href="/register" class="text-primary">Register</a></p>
@@ -119,6 +123,15 @@
                     }
                 });
             });
+        });
+    </script>
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordField = document.getElementById('password');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
         });
     </script>
 
