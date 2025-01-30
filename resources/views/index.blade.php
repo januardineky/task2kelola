@@ -6,7 +6,7 @@
 <nav aria-label="breadcrumb" class="ms-4 fw-bolder">
     <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-        <li class="breadcrumb-item"><a href="/users">User Data</a></li>
+        <li class="breadcrumb-item"><a href="/admin/users">User Data</a></li>
     </ol>
 </nav>
 <!-- Breadcrumb End -->

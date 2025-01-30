@@ -9,15 +9,14 @@ Route::get('/', function () {
     return view('login');
 });
 
-// Rute untuk autentikasi
+
 Route::post('/auth', [AuthController::class, 'auth']);
 Route::get('/register', [AuthController::class, 'register']);
 Route::post('/register', [AuthController::class, 'createuser']);
 
-// Rute dengan middleware "state"
+
 Route::middleware(['state'])->group(function () {
 
-    // Rute untuk admin dengan prefix 'admin'
     Route::prefix('admin')->group(function () {
         Route::get('/index', [AdminController::class, 'index']);
         Route::get('/users', [AdminController::class, 'getUsers']);
@@ -27,11 +26,10 @@ Route::middleware(['state'])->group(function () {
         Route::delete('/users/delete/{id}', [AdminController::class, 'destroy']);
     });
 
-    // Rute untuk user dengan prefix 'user'
+
     Route::prefix('user')->group(function () {
         Route::get('/home', [UserController::class, 'home']);
     });
 
-    // Rute logout (berlaku untuk semua)
     Route::get('/logout', [AuthController::class, 'logout']);
 });

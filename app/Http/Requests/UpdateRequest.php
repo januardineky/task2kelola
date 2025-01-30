@@ -54,7 +54,7 @@ class UpdateRequest extends FormRequest
             'email.unique' => 'This email is already registered.',
             'phone_number.regex' => 'Phone Number is Only For Number.',
             'address.required' => 'Address is required.',
-            'status.required' => 'Status \is required.',
+            'status.required' => 'Status is required.',
             'major.required' => 'Major is required.',
             'major.in' => 'Please select a valid major.',
         ];

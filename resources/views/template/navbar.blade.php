@@ -63,8 +63,8 @@
                             </div>
                         </div>
                         <div class="ms-3">
-                            <h6 class="mb-0">{{ $user->username }}</h6>
-                            <span>{{ $user->rolename }}</span>
+                            <h6 class="mb-0">{{ auth()->user()->username }}</h6>
+                            <span>{{ auth()->user()->rolename }}</span>
                         </div>
                     </div>
                     <div class="navbar-nav w-100">
@@ -97,7 +97,7 @@
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                                 <img class="rounded-circle me-lg-2" src="{{ asset('img/pp.png') }}" alt=""
                                     style="width: 40px; height: 40px;">
-                                <span class="d-none d-lg-inline-flex">{{ $user->username }}</span>
+                                <span class="d-none d-lg-inline-flex">{{ auth()->user()->username }}</span>
                             </a>
                             <div
                                 class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">

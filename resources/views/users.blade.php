@@ -4,7 +4,7 @@
     <!-- Breadcrumb Start -->
     <nav aria-label="breadcrumb" class="ms-4 fw-bolder">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="/admin/index">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">User Data</li>
         </ol>
     </nav>
@@ -12,14 +12,22 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
-                <h1 class="mt-4 text-start">Users Data</h1>
+            <div class="col-md-2">
+                <a href="/admin/users">
+                    <h1 id="usersTitle" class="mt-4">Users Data</h1>
+                </a>
             </div>
-            <div class="col-md-6 d-flex justify-content-end">
+            <div class="col-md-10 d-flex justify-content-end">
                 <button class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#createUserModal">
                     <i class="fas fa-user-plus"></i> Create
                 </button>
                 <form action="/admin/users" method="get" class="d-flex">
+
+                    <select name="sort_role" class="form-control me-4" onchange="this.form.submit()">
+                        <option value="">Sort by Role</option>
+                        <option value="Admin" {{ request('sort_role') == 'Admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="User" {{ request('sort_role') == 'User' ? 'selected' : '' }}>User</option>
+                    </select>
 
                     <select name="sort_major" class="form-control me-4" onchange="this.form.submit()">
                         <option value="">Sort by Major</option>
@@ -116,31 +124,32 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="new_username" class="form-label">Username</label>
-                                    <input type="text" class="form-control" name="username" id="new_username" required>
+                                    <input type="text" class="form-control" name="username" id="new_username">
                                     <div class="text-danger" id="usernameError"></div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="new_email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" name="email" id="new_email" required>
+                                    <input type="email" class="form-control" name="email" id="new_email">
                                     <div class="text-danger" id="emailError"></div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="new_phone_number" class="form-label">Phone Number</label>
-                                    <input type="text" class="form-control" name="phone_number" id="new_phone_number"
-                                        required>
-                                    <div class="text-danger" id="phonenumberError"></div>
+                                    <input type="text" class="form-control" name="phone_number"
+                                        id="new_phone_number">
+                                    <div class="text-danger" id="phone_numberError"></div>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="new_address" class="form-label">Address</label>
-                                    <textarea class="form-control" name="address" id="new_address" rows="4" required></textarea>
+                                    <textarea class="form-control" name="address" id="new_address" rows="4"></textarea>
                                     <div class="text-danger" id="addressError"></div>
                                 </div>
                                 <div class="mb-3 mt-4">
                                     <label for="new_status" class="form-label">Status</label>
-                                    <select class="form-control" name="status" id="new_status" required>
+                                    <select class="form-control" name="status" id="new_status">
+                                        <option value="">Select Status</option>
                                         <option value="1">Active</option>
                                         <option value="0">Not Active</option>
                                     </select>
@@ -153,7 +162,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="new_major" class="form-label">Major</label>
-                                    <select class="form-control" name="major" id="new_major" required>
+                                    <select class="form-control" name="major" id="new_major">
                                         <option value="">Select Major</option>
                                         <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
                                         <option value="Teknik Komputer Jaringan">Teknik Komputer Jaringan</option>
@@ -171,7 +180,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="new_rolename" class="form-label">Role</label>
-                                    <select class="form-control" name="rolename" id="new_rolename" required>
+                                    <select class="form-control" name="rolename" id="new_rolename">
                                         <option value="">Select Role</option>
                                         <option value="User">User</option>
                                         <option value="Admin">Admin</option>
@@ -181,27 +190,40 @@
                             </div>
                         </div>
 
-                        <!-- Password Inputs -->
                         <div class="row">
+                            <!-- Password -->
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 position-relative">
                                     <label for="new_password" class="form-label">Password</label>
-                                    <input type="password" class="form-control" name="password" id="new_password"
-                                        required>
+                                    <div class="position-relative">
+                                        <input type="password" class="form-control pe-5" name="password"
+                                            id="new_password">
+                                        <span class="position-absolute top-50 end-0 translate-middle-y me-3"
+                                            id="togglePassword1" style="cursor: pointer;">
+                                            <i class="fa fa-eye"></i>
+                                        </span>
+                                    </div>
                                     <div class="text-danger" id="passwordError"></div>
                                 </div>
                             </div>
+
+                            <!-- Confirm Password -->
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <div class="mb-3 position-relative">
                                     <label for="confirm_password" class="form-label">Confirm Password</label>
-                                    <input type="password" class="form-control" name="confirm_password"
-                                        id="confirm_password" required>
+                                    <div class="position-relative">
+                                        <input type="password" class="form-control pe-5" name="confirm_password"
+                                            id="confirm_password">
+                                        <span class="position-absolute top-50 end-0 translate-middle-y me-3"
+                                            id="togglePassword2" style="cursor: pointer;">
+                                            <i class="fa fa-eye"></i>
+                                        </span>
+                                    </div>
                                     <div class="text-danger" id="confirmPasswordError"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Create User</button>
@@ -230,18 +252,18 @@
                                 <div class="mb-3">
                                     <label for="username" class="form-label">Username</label>
                                     <input type="text" class="form-control" name="username" id="username">
-                                    <div class="text-danger" id="usernameError"></div>
+                                    <div class="text-danger" id="usernameErrorr"></div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control" name="email" id="email">
-                                    <div class="text-danger" id="emailError"></div>
+                                    <div class="text-danger" id="emailErrorr"></div>
 
                                 </div>
                                 <div class="mb-3">
                                     <label for="phone_number" class="form-label">Phone Number</label>
                                     <input type="text" class="form-control" name="phone_number" id="phone_number">
-                                    <div class="text-danger" id="phonenumberError"></div>
+                                    <div class="text-danger" id="phonenumberErrorr"></div>
 
                                 </div>
                             </div>
@@ -250,16 +272,17 @@
                                 <div class="mb-3">
                                     <label for="address" class="form-label">Address</label>
                                     <textarea class="form-control" name="address" id="address" rows="4" placeholder="Address"></textarea>
-                                    <div class="text-danger" id="addressError"></div>
+                                    <div class="text-danger" id="addressErrorr"></div>
 
                                 </div>
                                 <div class="mb-3 mt-4">
                                     <label for="status" class="form-label">Status</label>
                                     <select class="form-control" name="status" id="status">
+                                        <option value="">Select Status</option>
                                         <option value="1">Active</option>
                                         <option value="0">Not Active</option>
                                     </select>
-                                    <div class="text-danger" id="usernameError"></div>
+                                    <div class="text-danger" id="statusErrorr"></div>
                                 </div>
                             </div>
                         </div>
@@ -280,7 +303,7 @@
                                         <option value="Teknik Sepeda Motor">Teknik Sepeda Motor</option>
                                         <option value="Teknik Kendaraan Ringan">Teknik Kendaraan Ringan</option>
                                     </select>
-                                    <div class="text-danger" id="majorError"></div>
+                                    <div class="text-danger" id="majorErrorr"></div>
                                 </div>
                             </div>
                         </div>
@@ -299,6 +322,66 @@
 
 @section('script')
     <script>
+        {{--  document.addEventListener("DOMContentLoaded", function() {
+            const titleElement = document.getElementById("usersTitle");
+            const roleSelect = document.querySelector("select[name='sort_role']");
+            const majorSelect = document.querySelector("select[name='sort_major']");
+            const searchInput = document.querySelector("input[name='search']");
+
+            function updateTitle() {
+                let title = "Users Data";
+                let role = roleSelect.value;
+                let major = majorSelect.value;
+                let search = searchInput.value.trim();
+
+                if (role) {
+                    title = `${role} Data`;
+                }
+                if (major) {
+                    title = `${major} Students`;
+                }
+                if (search) {
+                    title = `Search Results for "${search}"`;
+                }
+                if (role && major) {
+                    title = `${role} - ${major}`;
+                }
+                if (role && search) {
+                    title = `${role} Search: "${search}"`;
+                }
+                if (major && search) {
+                    title = `${major} Search: "${search}"`;
+                }
+                if (role && major && search) {
+                    title = `${role} - ${major} Search: "${search}"`;
+                }
+
+                titleElement.textContent = title;
+            }
+
+            roleSelect.addEventListener("change", updateTitle);
+            majorSelect.addEventListener("change", updateTitle);
+            searchInput.addEventListener("input", updateTitle);
+        });  --}}
+
+
+        document.getElementById('togglePassword1').addEventListener('click', function() {
+            const passwordField = document.getElementById('new_password');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+        document.getElementById('togglePassword2').addEventListener('click', function() {
+            const passwordField = document.getElementById('confirm_password');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+
         $('#createUserForm').submit(function(e) {
             e.preventDefault();
 
@@ -327,7 +410,16 @@
                 success: function(response) {
                     console.log("Server Response:", response); // Debugging
                     if (response.success) {
-                        alert(response.message);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.message,
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                        })
+                        {{--  alert(response.message);  --}}
                         $('#createUserModal').modal('hide');
                         location.reload();
                     }
@@ -404,19 +496,22 @@
                     if (response.errors) {
                         console.log(response);
                         if (response.errors.username) {
-                            $('#usernameError').text(response.errors.username.join(' '));
+                            $('#usernameErrorr').text(response.errors.username.join(' '));
                         }
                         if (response.errors.email) {
-                            $('#emailError').text(response.errors.email.join(' '));
+                            $('#emailErrorr').text(response.errors.email.join(' '));
                         }
                         if (response.errors.phone_number) {
-                            $('#phonenumberError').text(response.errors.phone_number.join(' '));
+                            $('#phonenumberErrorr').text(response.errors.phone_number.join(' '));
                         }
                         if (response.errors.address) {
-                            $('#addressError').text(response.errors.address.join(' '));
+                            $('#addressErrorr').text(response.errors.address.join(' '));
                         }
                         if (response.errors.major) {
-                            $('#majorError').text(response.errors.major.join(' '));
+                            $('#majorErrorr').text(response.errors.major.join(' '));
+                        }
+                        if (response.errors.status) {
+                            $('#statusErrorr').text(response.errors.status.join(' '));
                         }
                     }
                 }
@@ -445,7 +540,15 @@
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            Swal.fire("Deleted!", response.message, "success");
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000
+                            })
                             location.reload();
                         },
                         error: function(xhr) {

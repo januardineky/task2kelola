@@ -18,33 +18,55 @@ class AdminController extends Controller
 
     public function index()
     {
-        $user = Auth::user();
         $users = User::all();
         $total = $users->where('rolename', 'User')->count();;
         $totaladmin = $users->where('rolename', 'Admin')->count();
-        return view("index", compact('user', 'total', 'totaladmin'));
+        return view("index", compact( 'total', 'totaladmin'));
     }
 
     public function getUsers(Request $request)
     {
-        $user = Auth::user();
 
-        $query = User::where('rolename', 'user');
+        $users = User::when($request->has('search') && !empty($request->search), function ($query) use ($request) {
+            $fields = ['username', 'address', 'major'];
+            
+            foreach($fields as $index => $field) {
+                if ($index === 0) {
+                    $query->where($field, 'LIKE', "%{$request->search}%");
+                } else {
+                    $query->orWhere($field, 'LIKE', "%{$request->search}%");
+                }
+            }
+        })
+            ->when($request->has('sort_major') && $request->sort_major != '', function ($query) use ($request) {
+                $query->where('major', $request->sort_major);
+            })
+            ->when($request->has('sort_role') && $request->sort_role != '', function ($query) use ($request) {
+                $query->where('rolename', $request->sort_role);
+            })
+            ->paginate(10);
 
-        // Apply search filter if exists
-        if ($request->has('search') && $request->search != '') {
-            $query->where('username', 'like', '%' . $request->search . '%')
-                ->orWhere('address', 'like', '%' . $request->search . '%')
-                ->orWhere('major', 'like', '%' . $request->search . '%');
-        }
 
-        if ($request->has('sort_major') && $request->sort_major != '') {
-            $query->where('major', $request->sort_major);
-        }
+        // $query = User::where('rolename', 'user');
+        // $query = User::query();
 
-        $tabel = $query->paginate(10);
+        // if ($request->has('search') && $request->search != '') {
+        //     $query->where('username', 'like', '%' . $request->search . '%')
+        //         ->orWhere('address', 'like', '%' . $request->search . '%')
+        //         ->orWhere('major', 'like', '%' . $request->search . '%');
+        // }
 
-        return view('users', compact('user', 'tabel'));
+        // if ($request->has('sort_major') && $request->sort_major != '') {
+        //     $query->where('major', $request->sort_major);
+        // }
+
+        // if ($request->has('sort_role') && $request->sort_role != '') {
+        //     $query->where('rolename', $request->sort_role);
+        // }
+
+        // $tabel = $query->paginate(10);
+
+        return view('users', ['tabel' => $users]);
     }
 
     public function store(RegisterRequest $request)
@@ -57,8 +79,8 @@ class AdminController extends Controller
                 'phone_number' => $request->phone_number,
                 'address' => $request->address,
                 'major' => $request->major,
-                'status' => $request->status ?? 1, // Default active jika tidak dikirim
-                'rolename' => $request->rolename ?? 'User', // Default ke User jika tidak dikirim
+                'status' => $request->status, // Default active jika tidak dikirim
+                'rolename' => $request->rolename, // Default ke User jika tidak dikirim
                 'password' => bcrypt($request->password),
             ]);
 
@@ -67,7 +89,6 @@ class AdminController extends Controller
                 'message' => 'User created successfully!',
                 'user' => $user
             ], 201);
-
         } catch (Exception $e) {
             // Tangani error lainnya
             return response()->json([
@@ -125,16 +146,16 @@ class AdminController extends Controller
     {
         try {
             $user = User::find($id);
-    
+
             if (!$user) {
                 return response()->json([
                     'success' => false,
                     'message' => 'User not found!'
                 ], 404);
             }
-    
+
             $user->delete();
-    
+
             return response()->json([
                 'success' => true,
                 'message' => 'User deleted successfully!'
@@ -145,9 +166,8 @@ class AdminController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred while deleting the user!',
-                'error' => $e->getMessage() 
+                'error' => $e->getMessage()
             ], 500);
         }
     }
-    
 }

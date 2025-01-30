@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('phone_number');
+            $table->string('phone_number')->unique();
             $table->text('address');
             $table->enum('major',['Rekayasa Perangkat Lunak','Teknik Komputer Jaringan','Teknik Elektronika Industri','Desain Komunikasi Visual','Desain Pemodelan dan Informasi Bangunan','Teknik Sepeda Motor','Teknik Kendaraan Ringan']);
             $table->tinyinteger('status');

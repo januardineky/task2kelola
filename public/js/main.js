@@ -11,10 +11,10 @@
     };
     spinner();
 
-    document.querySelector('.sidebar-toggler').addEventListener('click', function (e) {
-        e.preventDefault();
-        const sidebar = document.querySelector('.sidebar'); // Adjust the selector to match your sidebar element
-        sidebar.classList.toggle('collapsed'); // Ensure this class handles the collapsed state in your CSS
-    });
+    // document.querySelector('.sidebar-toggler').addEventListener('click', function (e) {
+    //     e.preventDefault();
+    //     const sidebar = document.querySelector('.sidebar'); // Adjust the selector to match your sidebar element
+    //     sidebar.classList.toggle('collapsed'); // Ensure this class handles the collapsed state in your CSS
+    // });
 })
 (jQuery);

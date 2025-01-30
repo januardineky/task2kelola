@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'username' => 'Neky',
             'email' => 'neky@example.id',
-            'phone_number' => '082376542356',
+            'phone_number' => '082376542357',
             'address' => 'Kp.soreang Kab.Bandung Provinsi Jawa Barat',
             'major' => 'Desain Komunikasi Visual',
             'status' => 0,
