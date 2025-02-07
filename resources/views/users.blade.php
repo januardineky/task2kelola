@@ -10,56 +10,21 @@
     </nav>
     <!-- Breadcrumb End -->
 
-    <div class="container">
+    <div class="container mb-5">
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-6">
                 <a href="/admin/users">
                     <h1 id="usersTitle" class="mt-4">Users Data</h1>
                 </a>
             </div>
-            <div class="col-md-10 d-flex justify-content-end">
-                <button class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#createUserModal">
+            <div class="col-md-12 d-flex justify-content-start mt-2">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">
                     <i class="fas fa-user-plus"></i> Create
                 </button>
-                <form action="/admin/users" method="get" class="d-flex">
-
-                    <select name="sort_role" class="form-control me-4" onchange="this.form.submit()">
-                        <option value="">Sort by Role</option>
-                        <option value="Admin" {{ request('sort_role') == 'Admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="User" {{ request('sort_role') == 'User' ? 'selected' : '' }}>User</option>
-                    </select>
-
-                    <select name="sort_major" class="form-control me-4" onchange="this.form.submit()">
-                        <option value="">Sort by Major</option>
-                        <option value="Rekayasa Perangkat Lunak"
-                            {{ request('sort_major') == 'Rekayasa Perangkat Lunak' ? 'selected' : '' }}>Rekayasa Perangkat
-                            Lunak</option>
-                        <option value="Teknik Komputer Jaringan"
-                            {{ request('sort_major') == 'Teknik Komputer Jaringan' ? 'selected' : '' }}>Teknik Komputer
-                            Jaringan</option>
-                        <option value="Teknik Elektronika Industri"
-                            {{ request('sort_major') == 'Teknik Elektronika Industri' ? 'selected' : '' }}>Teknik
-                            Elektronika Industri</option>
-                        <option value="Desain Komunikasi Visual"
-                            {{ request('sort_major') == 'Desain Komunikasi Visual' ? 'selected' : '' }}>Desain Komunikasi
-                            Visual</option>
-                        <option value="Desain Pemodelan dan Informasi Bangunan"
-                            {{ request('sort_major') == 'Desain Pemodelan dan Informasi Bangunan' ? 'selected' : '' }}>
-                            Desain Pemodelan dan Informasi Bangunan</option>
-                        <option value="Teknik Sepeda Motor"
-                            {{ request('sort_major') == 'Teknik Sepeda Motor' ? 'selected' : '' }}>Teknik Sepeda Motor
-                        </option>
-                        <option value="Teknik Kendaraan Ringan"
-                            {{ request('sort_major') == 'Teknik Kendaraan Ringan' ? 'selected' : '' }}>Teknik Kendaraan
-                            Ringan</option>
-                    </select>
-
-                    <input type="text" name="search" class="form-control" placeholder="Search">
-
-                </form>
             </div>
         </div>
-        <table id="usersTable" class="table table-bordered">
+
+        <table id="usersTable" class="table table-bordered mt-3">
             <thead>
                 <tr>
                     <th>Username</th>
@@ -68,46 +33,13 @@
                     <th>Address</th>
                     <th>Major</th>
                     <th>Status</th>
+                    <th>Role</th>
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($tabel as $index => $table)
-                    <tr>
-                        <td>{{ $table->username }}</td>
-                        <td>{{ $table->email }}</td>
-                        <td>{{ $table->phone_number }}</td>
-                        <td>{{ $table->address }}</td>
-                        <td>{{ $table->major }}</td>
-                        <td>{{ $table->status ? 'Active' : 'Not Active' }}</td>
-                        <td>
-                            <a href="#" class="btn btn-primary text-white p-2" title="Edit"
-                                onclick="openEditModal('{{ $table->id }}')">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="#" class="btn btn-primary text-white p-2" title="Delete"
-                                onclick="deleteUser('{{ $table->id }}')">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
         </table>
-
-        <!-- Pagination Controls -->
-        <div class="d-flex justify-content-center mt-3">
-            <ul class="pagination">
-                <li class="page-item {{ $tabel->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $tabel->previousPageUrl() }}" aria-label="Previous">
-                        << Previous</a>
-                </li>
-                <li class="page-item {{ $tabel->hasMorePages() ? '' : 'disabled' }}">
-                    <a class="page-link" href="{{ $tabel->nextPageUrl() }}" aria-label="Next">Next >></a>
-                </li>
-            </ul>
-        </div>
     </div>
+
 
     <!-- Create User Modal -->
     <div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
@@ -134,8 +66,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="new_phone_number" class="form-label">Phone Number</label>
-                                    <input type="text" class="form-control" name="phone_number"
-                                        id="new_phone_number">
+                                    <input type="text" class="form-control" name="phone_number" id="new_phone_number">
                                     <div class="text-danger" id="phone_numberError"></div>
                                 </div>
                             </div>
@@ -322,6 +253,62 @@
 
 @section('script')
     <script>
+        $(document).ready(function() {
+            $('#usersTable').DataTable({
+                serverSide: true,
+                ajax: {
+                    url: "/admin/users/data",
+                    type: 'GET'
+                },
+                columns: [{
+                        data: 'username',
+                        name: 'username'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'phone_number',
+                        name: 'phone_number'
+                    },
+                    {
+                        data: 'address',
+                        name: 'address'
+                    },
+                    {
+                        data: 'major',
+                        name: 'major'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        render: function(data) {
+                            return data ? 'Active' : 'Not Active';
+                        }
+                    },
+                    {
+                        data: 'rolename',
+                        name: 'rolename'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                dom: '<"top d-flex justify-content-between"l<"search-box"f>>rtip', // Mengatur posisi search
+                responsive: true,
+                languange: {
+                    search: "Search: ",
+                    lengthMenu: "Show _MENU_ entries",
+                }
+            });
+        });
+
+
+
         {{--  document.addEventListener("DOMContentLoaded", function() {
             const titleElement = document.getElementById("usersTitle");
             const roleSelect = document.querySelector("select[name='sort_role']");

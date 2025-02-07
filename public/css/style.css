@@ -522,3 +522,7 @@ body {
 #usersTable_filter input {
     margin-top: 10px; /* Adjust the value as needed */
 }
+
+.dataTables_wrapper .dataTables_filter {
+    margin-top: -10px; /* Sesuaikan angka ini untuk naik atau turun */
+}

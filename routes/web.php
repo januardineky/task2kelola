@@ -19,7 +19,9 @@ Route::middleware(['state'])->group(function () {
 
     Route::prefix('admin')->group(function () {
         Route::get('/index', [AdminController::class, 'index']);
-        Route::get('/users', [AdminController::class, 'getUsers']);
+        Route::get('/get-user-count', [AdminController::class, 'count']);
+        Route::get('/users', [AdminController::class, 'users']);
+        Route::get('/users/data', [AdminController::class, 'getUsers']);
         Route::post('/users/store', [AdminController::class, 'store']);
         Route::get('/users/{id}/edit', [AdminController::class, 'edit']);
         Route::put('/users/update/{id}', [AdminController::class, 'update']);

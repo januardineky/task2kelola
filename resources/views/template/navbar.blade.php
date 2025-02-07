@@ -69,14 +69,14 @@
                     </div>
                     <div class="navbar-nav w-100">
                         @if (auth()->user()->rolename == 'Admin')
-                            <a href="/admin/index" class="nav-item nav-link"><i
+                            <a href="/admin/index" class="nav-item nav-link {{ Request::is('admin/index') ? 'active' : '' }}"><i
                                     class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                         @else
-                            <a href="/user/home" class="nav-item nav-link"><i
+                            <a href="/user/home" class="nav-item nav-link {{ Request::is('user/home') ? 'active' : '' }}"><i
                                     class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                         @endif
                         @if (auth()->user()->rolename == 'Admin')
-                            <a href="/admin/users" class="nav-item nav-link"><i class="fa fa-table me-2"></i>User Data</a>
+                            <a href="/admin/users" class="nav-item nav-link {{ Request::is('admin/users') ? 'active' : '' }}"><i class="fa fa-table me-2"></i>User Data</a>
                         @endif
                     </div>
                 </nav>
@@ -145,20 +145,6 @@
         crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#usersTable').DataTable({
-                paging: false,
-                pageLength: 10, // Set the number of records per page
-                lengthChange: false, // Disable the "show entries" dropdown
-                searching: false, // Disable the search bar
-                info: false, // Disable the information display (e.g., "Showing 1 to 10 of 100")
-                serverSide: false, // We are not using server-side processing
-                responsive: true, // Make sure the table is responsive on smaller screens
-                stateSave: true,
-            });
-        });
-    </script>    
     @yield('script')
 </body>
 

@@ -15,58 +15,44 @@ use Yajra\DataTables\DataTables;
 class AdminController extends Controller
 {
     //
-
     public function index()
     {
+        return view('index');
+    }
+
+    public function count()
+    {
         $users = User::all();
-        $total = $users->where('rolename', 'User')->count();;
+        $total = $users->where('rolename', 'User')->count();
         $totaladmin = $users->where('rolename', 'Admin')->count();
-        return view("index", compact( 'total', 'totaladmin'));
+    
+        return response()->json([
+            'total' => $total,
+            'totaladmin' => $totaladmin
+        ]);
+    }
+
+    public function users()
+    {
+        return view('users');
     }
 
     public function getUsers(Request $request)
     {
-
-        $users = User::when($request->has('search') && !empty($request->search), function ($query) use ($request) {
-            $fields = ['username', 'address', 'major'];
-            
-            foreach($fields as $index => $field) {
-                if ($index === 0) {
-                    $query->where($field, 'LIKE', "%{$request->search}%");
-                } else {
-                    $query->orWhere($field, 'LIKE', "%{$request->search}%");
-                }
-            }
+        $users = User::select(['id', 'username', 'email', 'phone_number', 'address', 'major', 'status','rolename']);
+        return DataTables::of($users)
+        ->addColumn('action', function ($user) {
+            return '<div class="d-flex">
+                        <a href="#" class="btn btn-primary btn-sm me-3" title="Edit" onclick="openEditModal('.$user->id.')">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="#" class="btn btn-primary btn-sm" title="Delete" onclick="deleteUser('.$user->id.')">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>';
         })
-            ->when($request->has('sort_major') && $request->sort_major != '', function ($query) use ($request) {
-                $query->where('major', $request->sort_major);
-            })
-            ->when($request->has('sort_role') && $request->sort_role != '', function ($query) use ($request) {
-                $query->where('rolename', $request->sort_role);
-            })
-            ->paginate(10);
-
-
-        // $query = User::where('rolename', 'user');
-        // $query = User::query();
-
-        // if ($request->has('search') && $request->search != '') {
-        //     $query->where('username', 'like', '%' . $request->search . '%')
-        //         ->orWhere('address', 'like', '%' . $request->search . '%')
-        //         ->orWhere('major', 'like', '%' . $request->search . '%');
-        // }
-
-        // if ($request->has('sort_major') && $request->sort_major != '') {
-        //     $query->where('major', $request->sort_major);
-        // }
-
-        // if ($request->has('sort_role') && $request->sort_role != '') {
-        //     $query->where('rolename', $request->sort_role);
-        // }
-
-        // $tabel = $query->paginate(10);
-
-        return view('users', ['tabel' => $users]);
+        ->rawColumns(['action'])
+        ->make(true);
     }
 
     public function store(RegisterRequest $request)
