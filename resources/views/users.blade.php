@@ -253,103 +253,81 @@
 
 @section('script')
     <script>
-        $(document).ready(function() {
-            $('#usersTable').DataTable({
-                serverSide: true,
-                ajax: {
-                    url: "/admin/users/data",
-                    type: 'GET'
-                },
-                columns: [{
-                        data: 'username',
-                        name: 'username'
+        document.addEventListener("DOMContentLoaded", function() {
+            const titleElement = document.getElementById("usersTitle");
+
+            $(document).ready(function() {
+                const table = $('#usersTable').DataTable({
+                    serverSide: true,
+                    ajax: {
+                        url: "/admin/users/data",
+                        type: 'GET'
                     },
-                    {
-                        data: 'email',
-                        name: 'email'
-                    },
-                    {
-                        data: 'phone_number',
-                        name: 'phone_number'
-                    },
-                    {
-                        data: 'address',
-                        name: 'address'
-                    },
-                    {
-                        data: 'major',
-                        name: 'major'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status',
-                        render: function(data) {
-                            return data ? 'Active' : 'Not Active';
+                    columns: [{
+                            data: 'username',
+                            name: 'username'
+                        },
+                        {
+                            data: 'email',
+                            name: 'email'
+                        },
+                        {
+                            data: 'phone_number',
+                            name: 'phone_number'
+                        },
+                        {
+                            data: 'address',
+                            name: 'address'
+                        },
+                        {
+                            data: 'major',
+                            name: 'major'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status',
+                            render: data => data ? 'Active' : 'Not Active'
+                        },
+                        {
+                            data: 'rolename',
+                            name: 'rolename'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
                         }
-                    },
-                    {
-                        data: 'rolename',
-                        name: 'rolename'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
+                    ],
+                    dom: '<"top d-flex justify-content-between"l<"search-box"f>>rtip',
+                    responsive: true,
+                    language: {
+                        search: "Search: ",
+                        lengthMenu: "Show _MENU_ entries"
                     }
-                ],
-                dom: '<"top d-flex justify-content-between"l<"search-box"f>>rtip', // Mengatur posisi search
-                responsive: true,
-                languange: {
-                    search: "Search: ",
-                    lengthMenu: "Show _MENU_ entries",
+                });
+
+                // Fungsi untuk memperbarui judul berdasarkan input pencarian
+                function updateTitle() {
+                    const searchInput = document.querySelector("input[type='search']");
+                    const searchValue = searchInput.value.trim();
+
+                    if (searchValue) {
+                        titleElement.textContent = `Search Results for "${searchValue}"`;
+                    } else {
+                        titleElement.textContent = "Users Data";
+                    }
                 }
+
+                // Memperbarui judul saat pengguna mengetik di input pencarian
+                table.on('search.dt', function() {
+                    updateTitle();
+                });
+
+                // Inisialisasi pertama kali
+                updateTitle();
             });
         });
-
-
-
-        {{--  document.addEventListener("DOMContentLoaded", function() {
-            const titleElement = document.getElementById("usersTitle");
-            const roleSelect = document.querySelector("select[name='sort_role']");
-            const majorSelect = document.querySelector("select[name='sort_major']");
-            const searchInput = document.querySelector("input[name='search']");
-
-            function updateTitle() {
-                let title = "Users Data";
-                let role = roleSelect.value;
-                let major = majorSelect.value;
-                let search = searchInput.value.trim();
-
-                if (role) {
-                    title = `${role} Data`;
-                }
-                if (major) {
-                    title = `${major} Students`;
-                }
-                if (search) {
-                    title = `Search Results for "${search}"`;
-                }
-                if (role && major) {
-                    title = `${role} - ${major}`;
-                }
-                if (role && search) {
-                    title = `${role} Search: "${search}"`;
-                }
-                if (major && search) {
-                    title = `${major} Search: "${search}"`;
-                }
-                if (role && major && search) {
-                    title = `${role} - ${major} Search: "${search}"`;
-                }
-
-                titleElement.textContent = title;
-            }
-
-            roleSelect.addEventListener("change", updateTitle);
-            majorSelect.addEventListener("change", updateTitle);
-            searchInput.addEventListener("input", updateTitle);
-        });  --}}
 
 
         document.getElementById('togglePassword1').addEventListener('click', function() {
