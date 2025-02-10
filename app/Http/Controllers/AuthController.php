@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\CreateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -18,7 +18,7 @@ class AuthController extends Controller
         return view("register");
     }
 
-    public function createuser(RegisterRequest $request)
+    public function createuser(CreateUserRequest $request)
     {
         $validated = $request->validated();
 
