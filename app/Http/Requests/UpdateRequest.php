@@ -26,7 +26,7 @@ class UpdateRequest extends FormRequest
         return [
             'username' => 'required|string|max:255|' . Rule::unique('users', 'username')->ignore($userId),
             'email' => 'required|string|email|max:255|' . Rule::unique('users', 'email')->ignore($userId),
-            'phone_number' => 'required|regex:/^[0-9]+$/|min:12|max:13',
+            'phone_number' => 'required|regex:/^[0-9]+$/|min:11|max:13',
             'address' => 'required|string',
             'status' => 'required',
             'major' => [
