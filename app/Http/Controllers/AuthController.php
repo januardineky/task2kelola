@@ -54,10 +54,10 @@ class AuthController extends Controller
     public function auth(AuthRequest $request)
     {
         $validate = $request->validated();
-    
+
         if (auth()->attempt($validate)) {
             $user = auth()->user();
-    
+
             if ($user->status == 0) {
                 auth()->logout();
                 return response()->json([
@@ -65,28 +65,34 @@ class AuthController extends Controller
                     'inactive' => true
                 ], 403);
             }
-    
+
             $request->session()->regenerate();
             $welcomeMessage = 'Welcome ' . $user->username;
             $redirectUrl = $user->rolename === 'Admin' ? '/admin/index' : '/user/home';
-    
+
             return response()->json([
                 'message' => 'Success',
                 'redirect' => $redirectUrl,
                 'welcomeMessage' => $welcomeMessage
             ], 200);
         }
-    
+
         return response()->json(['message' => 'Username atau Password salah', 'error' => true], 401);
     }
-    
-    
 
 
-    public function logout()
+
+
+    public function logout(Request $request)
     {
         Auth::logout();
-        toast('Logout Berhasil', 'success');
-        return redirect('/');
+
+        // Jika permintaan menggunakan AJAX, kembalikan response JSON
+        if ($request->ajax()) {
+            return response()->json(['message' => 'Logout Berhasil', 'redirect' => '/']);
+        }
+
+        // Jika bukan AJAX, redirect seperti biasa
+        return redirect('/')->with('success', 'Logout Berhasil');
     }
 }

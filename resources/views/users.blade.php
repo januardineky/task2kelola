@@ -382,6 +382,8 @@
                             toast: true,
                             position: 'top-end',
                             showConfirmButton: false,
+                            background: "linear-gradient(135deg, #2C2C2C, #1A1A1A)",
+                            color: "#fff",
                             timer: 3000
                         })
                         {{--  alert(response.message);  --}}
@@ -450,6 +452,8 @@
                             toast: true,
                             position: 'top-end',
                             showConfirmButton: false,
+                            background: "linear-gradient(135deg, #2C2C2C, #1A1A1A)",
+                            color: "#fff",
                             timer: 5000
                         })
                     }
@@ -495,6 +499,8 @@
                 showCancelButton: true,
                 confirmButtonColor: "#d33",
                 cancelButtonColor: "#3085d6",
+                background: "linear-gradient(135deg, #2C2C2C, #1A1A1A)",
+                color: "#fff",
                 confirmButtonText: "Yes, delete it!"
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -512,6 +518,8 @@
                                 toast: true,
                                 position: 'top-end',
                                 showConfirmButton: false,
+                                background: "linear-gradient(135deg, #2C2C2C, #1A1A1A)",
+                                color: "#fff",
                                 timer: 3000
                             })
                             location.reload();

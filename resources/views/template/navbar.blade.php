@@ -69,14 +69,18 @@
                     </div>
                     <div class="navbar-nav w-100">
                         @if (auth()->user()->rolename == 'Admin')
-                            <a href="/admin/index" class="nav-item nav-link {{ Request::is('admin/index') ? 'active' : '' }}"><i
+                            <a href="/admin/index"
+                                class="nav-item nav-link {{ Request::is('admin/index') ? 'active' : '' }}"><i
                                     class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                         @else
-                            <a href="/user/home" class="nav-item nav-link {{ Request::is('user/home') ? 'active' : '' }}"><i
+                            <a href="/user/home"
+                                class="nav-item nav-link {{ Request::is('user/home') ? 'active' : '' }}"><i
                                     class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                         @endif
                         @if (auth()->user()->rolename == 'Admin')
-                            <a href="/admin/users" class="nav-item nav-link {{ Request::is('admin/users') ? 'active' : '' }}"><i class="fa fa-table me-2"></i>User Data</a>
+                            <a href="/admin/users"
+                                class="nav-item nav-link {{ Request::is('admin/users') ? 'active' : '' }}"><i
+                                    class="fa fa-table me-2"></i>User Data</a>
                         @endif
                     </div>
                 </nav>
@@ -101,7 +105,7 @@
                             </a>
                             <div
                                 class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                                <a href="/logout" class="dropdown-item">Log Out</a>
+                                <a href="#" id="logoutBtn" class="dropdown-item">Log Out</a>
                             </div>
                         </div>
                     </div>
@@ -145,6 +149,52 @@
         crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#logoutBtn').on('click', function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: '{{ route('logout') }}', // URL route logout
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}' // CSRF token untuk keamanan
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: response.message,
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            background: "linear-gradient(135deg, #2C2C2C, #1A1A1A)",
+                            color: "#fff"
+                        });
+
+                        // Redirect setelah logout berhasil
+                        setTimeout(function() {
+                            window.location.href = response.redirect;
+                        }, 1000);
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Gagal logout, coba lagi!',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            background: "linear-gradient(135deg, #2C2C2C, #1A1A1A)",
+                            color: "#fff"
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
     @yield('script')
 </body>
 

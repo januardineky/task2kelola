@@ -78,6 +78,8 @@
                                 toast: true,
                                 position: 'top-end',
                                 showConfirmButton: false,
+                                background: "linear-gradient(135deg, #2C2C2C, #1A1A1A)",
+                                color: "#fff",
                                 timer: 5000
                             })
                         }
